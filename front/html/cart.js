@@ -1,5 +1,9 @@
-//Voir tuto training Dev Youtube
+//Voir tuto training Dev Youtube  
+///////////TOUTES LES FONCTIONS UTILE LIEES AU PANIER
 function saveBasket(basket) {
+
+
+    //console.log(basket[0]._id);
     localStorage.setItem("basket", JSON.stringify(basket));
 }
 
@@ -16,8 +20,10 @@ function getBasket() {
 
 function addToBasket(product) {
     let basket = getBasket();
+
+    product.color = product.colors[1]; //à régler ensuite pour que l'utilisateur choisisse vraiment sa couleur
     let foundProduct = basket.find(p => {
-        return (p.id == product.id && p.color == product.color)
+        return (p._id == product._id && p.color == product.color)
     }); //chercher dans le panier si il y a un produit dont l'id est égal à l'id du produit que je veux ajouter
     //retourne l'élement en question si il trouve, sinon underfined.
     if (foundProduct != undefined) {
@@ -27,22 +33,34 @@ function addToBasket(product) {
         basket.push(product);
     }
 
+
     saveBasket(basket);
 }
 
 
-function addProductsToBasket(product, productQuantity) {
+function addProductsToBasket(product, productQuantity, productColor) {
     let basket = getBasket();
+    product.color = productColor;
     let foundProduct = basket.find(p => {
-        return (p.id == product.id && p.color == product.color)
+        return (p._id == product._id && p.color == product.color)
     }); //chercher dans le panier si il y a un produit dont l'id est égal à l'id du produit que je veux ajouter
     //retourne l'élement en question si il trouve, sinon undefined.
     if (foundProduct != undefined) {
         foundProduct.quantity += productQuantity;
+        console.log("go");
     } else {
         product.quantity = productQuantity;
-        basket.push(product);
+        var productToSave = {
+            _id: product._id,
+            color: product.color,
+            quantity: product.quantity
+
+        }
+
+        console.log(productToSave);
+        basket.push(productToSave);
     }
+
 
     saveBasket(basket);
 
@@ -52,7 +70,7 @@ function removeFromBasket(product) { /////// QUESTION MENTOR
 
     let basket = getBasket();
     //Filtre le tableau par rapport à une condition !! 
-    poubelle = basket.filter(p => p.id != product.id && p.color != product.color); //Conserve tous les produits dont l'id est différent de l'id en question
+    poubelle = basket.filter(p => p._id != product._id && p.color != product.color); //Conserve tous les produits dont l'id est différent de l'id en question
     //en gros supprime le produit
     saveBasket(basket);
 }
@@ -60,7 +78,7 @@ function removeFromBasket(product) { /////// QUESTION MENTOR
 function changeQuantity(product, quantity) {
     let basket = getBasket();
     let foundProduct = basket.find(p => {
-        return (p.id == product.id && p.color == product.color)
+        return (p._id == product._id && p.color == product.color)
     });
     if (foundProduct != undefined) {
         foundProduct.quantity += quantity;
@@ -72,6 +90,9 @@ function changeQuantity(product, quantity) {
     }
 }
 
+
+
+/////////Ces fonctions ne marche plus vu je ne stocke pas le prix dans le panier 
 function getNumberProduct() {
     let basket = getBasket();
     let number = 0;
