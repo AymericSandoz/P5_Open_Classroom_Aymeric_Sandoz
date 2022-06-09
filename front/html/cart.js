@@ -70,18 +70,21 @@ function removeFromBasket(product) { /////// QUESTION MENTOR
 
     let basket = getBasket();
     //Filtre le tableau par rapport à une condition !! 
-    poubelle = basket.filter(p => p._id != product._id && p.color != product.color); //Conserve tous les produits dont l'id est différent de l'id en question
+    basket = basket.filter(p => {
+        return p._id != product._id || p.color != product.color;
+    }); //Conserve tous les produits dont l'id est différent de l'id en question
     //en gros supprime le produit
     saveBasket(basket);
 }
 
 function changeQuantity(product, quantity) {
+
     let basket = getBasket();
     let foundProduct = basket.find(p => {
         return (p._id == product._id && p.color == product.color)
     });
     if (foundProduct != undefined) {
-        foundProduct.quantity += quantity;
+        foundProduct.quantity = quantity;
     }
     if (foundProduct.quantity <= 0) {
         removeFromBasket(foundProduct);

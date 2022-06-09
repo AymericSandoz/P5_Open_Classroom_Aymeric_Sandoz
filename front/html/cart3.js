@@ -1,4 +1,4 @@
-let ListBasket = getBasket();
+var ListBasket = getBasket();
 
 var ListBasketToDisplay;
 var totalPrice = 0;
@@ -13,21 +13,47 @@ async function displayAllBasketproducts(ListBasket) {
 
         canapePrice = await asyncKanapTest(ListBasket, i); ///Question mentor ! Porquoi la fonction s'exécute alors que je la stocke dans une variable ? 
 
-        console.log(canapePrice);
+
         ////Partie pour calculer le prix
         totalPrice += ListBasket[i].quantity * canapePrice;
 
         ///////////: Partie pour calculer laa quantité totale
-        totalProductQuantity += ListBasket[i].quantity;
+        totalProductQuantity += parseInt(ListBasket[i].quantity);
 
     };
     let cartPrice = document.querySelector(".cart__price");
     cartPrice.innerHTML = `<p>Total (<span id="totalQuantity">${totalProductQuantity}</span> articles) : <span id="totalPrice">${totalPrice}</span> €</p>
     `
 
+    ///////////////////changer la quantité de produit
+    const selectElement = document.getElementsByClassName('itemQuantity');
+
+    for (let i = 0; i < selectElement.length; i++) {
+        selectElement[i].addEventListener('change', (event) => {
+
+            let inputChange = selectElement[i].value;
+            changeQuantity(ListBasket[i], inputChange);
+
+        });
+    }
+
+    const itemToDelete = document.getElementsByClassName('deleteItem');
+
+    for (let i = 0; i < itemToDelete.length; i++) {
+        itemToDelete[i].addEventListener('click', (event) => {
+            
+            removeFromBasket(ListBasket[i]);
+
+
+        });
+    }
+
+
+
+    //////////////////// supprimer un produit 
+
+
 }
-
-
 
 async function asyncKanapTest(ListBasket, i) {
     let response = await fetch(`http://localhost:3000/api/products/` + ListBasket[i]._id);
@@ -36,7 +62,7 @@ async function asyncKanapTest(ListBasket, i) {
     let itemBasketArticle = document.querySelector("#cart__items");
 
     itemBasketArticle.innerHTML += AfficherCanapePageProduit(Canape, ListBasket[i].quantity, ListBasket[i].color);
-    console.log(Canape.price);
+
     return Canape.price;
 
 
