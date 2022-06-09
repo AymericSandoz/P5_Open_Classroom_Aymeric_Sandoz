@@ -41,7 +41,7 @@ async function displayAllBasketproducts(ListBasket) {
 
     for (let i = 0; i < itemToDelete.length; i++) {
         itemToDelete[i].addEventListener('click', (event) => {
-            
+
             removeFromBasket(ListBasket[i]);
 
 
