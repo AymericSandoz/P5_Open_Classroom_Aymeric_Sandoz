@@ -11,7 +11,7 @@ async function displayAllBasketproducts(ListBasket) {
 
 
 
-        canapePrice = await asyncKanapTest(ListBasket, i); ///Question mentor ! Porquoi la fonction s'exécute alors que je la stocke dans une variable ? 
+        canapePrice = await asyncKanapTest(ListBasket, i);
 
 
         ////Partie pour calculer le prix
@@ -21,22 +21,29 @@ async function displayAllBasketproducts(ListBasket) {
         totalProductQuantity += parseInt(ListBasket[i].quantity);
 
     };
-    let cartPrice = document.querySelector(".cart__price");
-    cartPrice.innerHTML = `<p>Total (<span id="totalQuantity">${totalProductQuantity}</span> articles) : <span id="totalPrice">${totalPrice}</span> €</p>
-    `
 
-    ///////////////////changer la quantité de produit
-    const selectElement = document.getElementsByClassName('itemQuantity');
+    actualiseTotalPriceAndQuantity(totalProductQuantity, totalPrice);
+    //let cartPrice = document.querySelector(".cart__price");
+    //cartPrice.innerHTML = `<p>Total (<span id="totalQuantity">${totalProductQuantity}</span> articles) : <span id="totalPrice">${totalPrice}</span> €</p> `;
+
+
+
+    ///////////////////changer la quantité de produit  !!! ajoute un addeventlistener pour chaque produits du panier
+    let selectElement = document.getElementsByClassName('itemQuantity');
 
     for (let i = 0; i < selectElement.length; i++) {
         selectElement[i].addEventListener('change', (event) => {
 
             let inputChange = selectElement[i].value;
-            changeQuantity(ListBasket[i], inputChange);
+            changeQuantity(ListBasket[i], inputChange, i);
+            console.log("youpi");
+
+
 
         });
     }
 
+    /////////////supprimer un produit, pareil ahoute un addEventList pour chaque produits du paniers
     const itemToDelete = document.getElementsByClassName('deleteItem');
 
     for (let i = 0; i < itemToDelete.length; i++) {
@@ -44,37 +51,33 @@ async function displayAllBasketproducts(ListBasket) {
 
             removeFromBasket(ListBasket[i]);
 
-
+            // location.reload();
         });
     }
 
-
-
-    //////////////////// supprimer un produit 
-
-
 }
 
+//////////Permet d'afficher tout les canapés
 async function asyncKanapTest(ListBasket, i) {
     let response = await fetch(`http://localhost:3000/api/products/` + ListBasket[i]._id);
     let Canape = await response.json();
 
     let itemBasketArticle = document.querySelector("#cart__items");
 
-    itemBasketArticle.innerHTML += AfficherCanapePageProduit(Canape, ListBasket[i].quantity, ListBasket[i].color);
+    itemBasketArticle.innerHTML += AfficherCanapePagePanier(Canape, ListBasket[i].quantity, ListBasket[i].color);
 
     return Canape.price;
 
 
 
-}
+};
 
 
 
-displayAllBasketproducts(ListBasket);
 
 
-const AfficherCanapePageProduit = function(Canape, CanapeQuantity, CanapeColor) {
+/////////Permet d'afficher un canape
+const AfficherCanapePagePanier = function(Canape, CanapeQuantity, CanapeColor) {
     let result = `<article class="cart__item" data-id="${Canape._id}" data-color="${CanapeColor}">
     <div class="cart__item__img">
       <img src="${Canape.imageUrl}" alt="Photographie d'un canapé">
@@ -99,3 +102,7 @@ const AfficherCanapePageProduit = function(Canape, CanapeQuantity, CanapeColor) 
 
     return result;
 }
+
+
+
+displayAllBasketproducts(ListBasket);

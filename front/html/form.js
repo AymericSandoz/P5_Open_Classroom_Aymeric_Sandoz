@@ -1,11 +1,40 @@
+let contact = new Object();
+
+
+////////creer un array avec juste les id 
+let createProductsIdArray = function() {
+    let basket = getBasket();
+    let productsIdArray = new Array();
+    for (let i = 0; i < basket.length; i++) {
+        productsIdArray[i] = basket[i]._id;
+    };
+    return productsIdArray;
+};
+
+
+//let a = createProductsIdArray;
+
+
+products = createProductsIdArray();
+let order = {
+    contact,
+    products
+};
+console.log(order);
+
 /////////////validation et envoie d'un formulaire
 let form = document.querySelector(".cart__order__form");
 
 form.addEventListener('submit', function(e) {
     e.preventDefault();
-    if (validEmail(form.email) && validFirstName(form.firstName) && validLastName(form.lastName)) {
-        form.submit();
-        console.log("wtf ça marche");
+    if (validEmail(form.email) && validAddress(form.address) && validCity(form.city) && validFirstName(form.firstName) && validLastName(form.lastName)) {
+        //form.submit();
+        console.log(contact);
+        console.log(products);
+        console.log(submitForm());
+
+
+
     } else {
         console.log("NOOOOOOOOOOONNNNNNNNNNNNN");
     }
@@ -35,7 +64,10 @@ const validEmail = function(inputEmail) {
 
         errorEmail.innerHTML = "E-mail valide";
         errorEmail.style.color = 'green';
+        contact.email = inputEmail.value;
+        console.log(contact.email);
         return true;
+
     } else {
         errorEmail.innerHTML = "E-mail non valide";
         errorEmail.style.color = 'red';
@@ -76,6 +108,7 @@ const validFirstName = function(inputFirstName) {
 
         errorFirstName.innerHTML = "Prénom valide";
         errorFirstName.style.color = 'green';
+        contact.firstName = inputFirstName.value;
         return true;
     } else {
         errorFirstName.innerHTML = "Prénom non valide";
@@ -110,6 +143,7 @@ const validLastName = function(inputLastName) {
 
         errorLastName.innerHTML = "Nom valide";
         errorLastName.style.color = 'green';
+        contact.lastName = inputLastName.value;
         return true;
     } else {
         errorLastName.innerHTML = "Nom non valide";
@@ -131,7 +165,7 @@ form.address.addEventListener('change', function() {
 const validAddress = function(inputAddress) {
     ///creation de la regexp pour la validation adresse
     let addressRegex = new RegExp(
-        /^[A-Za-z_-]+$/
+        /^[a-zA-Z0-9.-_]{2,}$/
     );
 
 
@@ -144,6 +178,7 @@ const validAddress = function(inputAddress) {
 
         errorAddress.innerHTML = "Adresse valide";
         errorAddress.style.color = 'green';
+        contact.address = inputAddress.value;
         return true;
     } else {
         errorAddress.innerHTML = "Adresse non valide";
@@ -166,7 +201,7 @@ form.city.addEventListener('change', function() {
 const validCity = function(inputCity) {
     ///creation de la regexp pour la validation firstName
     let cityRegex = new RegExp(
-        /^[A-Za-z_-]+$/
+        /^[a-zA-Z0-9.-_]{2,}$/
     );
 
 
@@ -174,11 +209,13 @@ const validCity = function(inputCity) {
     let testCity = cityRegex.test(inputCity.value);
 
     let errorCity = document.querySelector("#cityErrorMsg");
-    console.log(errorCity);
+
     if (testCity) {
 
         errorCity.innerHTML = "Champ valide";
         errorCity.style.color = 'green';
+        contact.city = inputCity.value;
+        console.log(inputCity.value);
         return true;
     } else {
         errorCity.innerHTML = "Champ non valide";
@@ -187,3 +224,20 @@ const validCity = function(inputCity) {
     }
 
 }
+
+
+async function submitForm() {
+    let response = await fetch("http://localhost:3000/api/products/order", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+        body: JSON.stringify(order)
+    });
+
+    let result = await response.json();
+    //localStorage.clear();
+    orderId = result.orderId ; 
+    document.location.href = `confirmation.html?id=${orderId}`;
+
+};

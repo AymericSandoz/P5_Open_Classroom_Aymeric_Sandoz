@@ -66,7 +66,7 @@ function addProductsToBasket(product, productQuantity, productColor) {
 
 }
 
-function removeFromBasket(product) { /////// QUESTION MENTOR
+function removeFromBasket(product) {
 
     let basket = getBasket();
     //Filtre le tableau par rapport à une condition !! 
@@ -75,9 +75,16 @@ function removeFromBasket(product) { /////// QUESTION MENTOR
     }); //Conserve tous les produits dont l'id est différent de l'id en question
     //en gros supprime le produit
     saveBasket(basket);
+
+
+    ///////////actualiser le dom
+    let itemBasketArticle = document.querySelector("#cart__items");
+    itemBasketArticle.innerHTML = "";
+    displayAllBasketproducts(getBasket());
 }
 
-function changeQuantity(product, quantity) {
+function changeQuantity(product, quantity, i) {
+    let cartContentQuantity = document.querySelectorAll('.cart__item__content__settings__quantity p');
 
     let basket = getBasket();
     let foundProduct = basket.find(p => {
@@ -89,9 +96,38 @@ function changeQuantity(product, quantity) {
     if (foundProduct.quantity <= 0) {
         removeFromBasket(foundProduct);
     } else {
-        saveBasket(basket); //sinon le if à la ligne d'avant le marche pas 
+        saveBasket(basket);
+        cartContentQuantity[i].innerHTML = `Qté : ${foundProduct.quantity}`;
+
+
     }
 }
+
+
+////////fonctions pour actualiser la quantitée totale et le prix total
+function actualiseTotalPriceAndQuantity(totalProductQuantity, totalPrice) {
+
+    let cartPrice = document.querySelector(".cart__price");
+    cartPrice.innerHTML = `<p>Total (<span id="totalQuantity">${totalProductQuantity}</span> articles) : <span id="totalPrice">${totalPrice}</span> €</p>`;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -100,16 +136,26 @@ function getNumberProduct() {
     let basket = getBasket();
     let number = 0;
     for (let product of basket) {
-        number += product.quantity;
+        number += parseInt(product.quantity);
     }
 
     return number;
 }
 
+
+
+async function getProductPrice(product) {
+    let response = await fetch(`http://localhost:3000/api/products/` + product._id);
+    let product = await response.json();
+    return product.price;
+}
+
 function getTotalPrice() {
     let basket = getBasket();
     let total = 0;
+
     for (let product of basket) {
+        product.price = getProductPrice(product);
         total += product.quantity * product.price;
     }
     return total;
