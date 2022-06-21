@@ -237,7 +237,7 @@ async function submitForm() {
 
     let result = await response.json();
     //localStorage.clear();
-    orderId = result.orderId ; 
+    orderId = result.orderId;
     document.location.href = `confirmation.html?id=${orderId}`;
 
 };

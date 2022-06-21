@@ -6,6 +6,4 @@ console.log(idOrder);
 
 let confirmation = document.querySelector("#orderId");
 
-confirmation.innerHTML = `${idOrder}`
-;
-
+confirmation.innerHTML = `${idOrder}`;

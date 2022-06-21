@@ -76,11 +76,7 @@ function removeFromBasket(product) {
     //en gros supprime le produit
     saveBasket(basket);
 
-
-    ///////////actualiser le dom
-    let itemBasketArticle = document.querySelector("#cart__items");
-    itemBasketArticle.innerHTML = "";
-    displayAllBasketproducts(getBasket());
+    actualiseTotalPriceAndQuantity(tabCanapePrice);
 }
 
 function changeQuantity(product, quantity, i) {
@@ -101,12 +97,14 @@ function changeQuantity(product, quantity, i) {
 
 
     }
+    actualiseTotalPriceAndQuantity(tabCanapePrice);
 }
 
 
 ////////fonctions pour actualiser la quantitée totale et le prix total
-function actualiseTotalPriceAndQuantity(totalProductQuantity, totalPrice) {
-
+function actualiseTotalPriceAndQuantity(tabCanapePrice) {
+    totalProductQuantity = getNumberProduct();
+    totalPrice = getTotalPrice(tabCanapePrice);
     let cartPrice = document.querySelector(".cart__price");
     cartPrice.innerHTML = `<p>Total (<span id="totalQuantity">${totalProductQuantity}</span> articles) : <span id="totalPrice">${totalPrice}</span> €</p>`;
 }
@@ -142,21 +140,22 @@ function getNumberProduct() {
     return number;
 }
 
+function getTotalPrice(tabCanapePrice) {
+    let basket = getBasket();
+    let total = 0;
+    let i = 0;
 
+    for (let product of basket) {
 
+        product.price = tabCanapePrice[i];
+        total += product.quantity * product.price;
+        i++;
+    }
+    return total;
+}
+/*
 async function getProductPrice(product) {
     let response = await fetch(`http://localhost:3000/api/products/` + product._id);
     let product = await response.json();
     return product.price;
-}
-
-function getTotalPrice() {
-    let basket = getBasket();
-    let total = 0;
-
-    for (let product of basket) {
-        product.price = getProductPrice(product);
-        total += product.quantity * product.price;
-    }
-    return total;
-}
+}*/
