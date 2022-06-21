@@ -1,40 +1,36 @@
+function compareKanapName(a, b) {
+    if (a.name.toLowerCase() < b.name.toLowerCase()) {
+        return -1;
+    }
+    if (a.name.toLowerCase() > b.name.toLowerCase()) {
+        return 1;
+    }
+    return 0;
+}
+
+
+
+
+
 //Voir tuto training Dev Youtube  
+
+
 ///////////TOUTES LES FONCTIONS UTILE LIEES AU PANIER
 function saveBasket(basket) {
-
-
-    //console.log(basket[0]._id);
+    basket.sort(compareKanapName);
     localStorage.setItem("basket", JSON.stringify(basket));
 }
 
 function getBasket() {
 
     let basket = localStorage.getItem("basket");
+
     if (basket == null) {
         return [];
 
     } else {
         return JSON.parse(basket);
     }
-}
-
-function addToBasket(product) {
-    let basket = getBasket();
-
-    product.color = product.colors[1]; //à régler ensuite pour que l'utilisateur choisisse vraiment sa couleur
-    let foundProduct = basket.find(p => {
-        return (p._id == product._id && p.color == product.color)
-    }); //chercher dans le panier si il y a un produit dont l'id est égal à l'id du produit que je veux ajouter
-    //retourne l'élement en question si il trouve, sinon underfined.
-    if (foundProduct != undefined) {
-        foundProduct.quantity++;
-    } else {
-        product.quantity = 1;
-        basket.push(product);
-    }
-
-
-    saveBasket(basket);
 }
 
 
@@ -53,7 +49,9 @@ function addProductsToBasket(product, productQuantity, productColor) {
         var productToSave = {
             _id: product._id,
             color: product.color,
-            quantity: product.quantity
+            quantity: product.quantity,
+            name: product.name
+
 
         }
 

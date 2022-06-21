@@ -1,5 +1,7 @@
-let CanapeID;
 
+//let CanapeID;//
+
+/************<!--  Promesse pour récupérer la liste de l'ensemble des articles *************/
 fetch('http://localhost:3000/api/products')
     .then(function(res) {
         if (res.ok) {

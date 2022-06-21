@@ -27,16 +27,18 @@ let form = document.querySelector(".cart__order__form");
 
 form.addEventListener('submit', function(e) {
     e.preventDefault();
-    if (validEmail(form.email) && validAddress(form.address) && validCity(form.city) && validFirstName(form.firstName) && validLastName(form.lastName)) {
-        //form.submit();
-        console.log(contact);
-        console.log(products);
-        console.log(submitForm());
+    let basket = getBasket;
+
+    if (basket.length == 0) {
+        alert("Votre panier est vide");
+    }
+    else if (validEmail(form.email) && validAddress(form.address) && validCity(form.city) && validFirstName(form.firstName) && validLastName(form.lastName)) {
+        submitForm();
 
 
 
     } else {
-        console.log("NOOOOOOOOOOONNNNNNNNNNNNN");
+        alert("Les champs ne sont pas correctement renseignés");
     }
 
 })
