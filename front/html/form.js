@@ -1,7 +1,8 @@
 let contact = new Object();
 
 
-////////creer un array avec juste les id 
+/************ <!--  fonction pour creer un tableau avec les Id des canapés du panier--> *************/
+
 let createProductsIdArray = function() {
     let basket = getBasket();
     let productsIdArray = new Array();
@@ -11,30 +12,27 @@ let createProductsIdArray = function() {
     return productsIdArray;
 };
 
-
-//let a = createProductsIdArray;
-
+/************ <!--  Création du l'objet à envoyer dans la requetes post --> *************/
 
 products = createProductsIdArray();
 let order = {
     contact,
     products
 };
-console.log(order);
 
-/////////////validation et envoie d'un formulaire
+
+/************ <!--  Validation du formulaire--> *************/
 let form = document.querySelector(".cart__order__form");
 
 form.addEventListener('submit', function(e) {
     e.preventDefault();
-    let basket = getBasket;
+    let basket = getBasket();
 
     if (basket.length == 0) {
         alert("Votre panier est vide");
-    }
-    else if (validEmail(form.email) && validAddress(form.address) && validCity(form.city) && validFirstName(form.firstName) && validLastName(form.lastName)) {
+    } else if (validEmail(form.email) && validAddress(form.address) && validCity(form.city) && validFirstName(form.firstName) && validLastName(form.lastName)) {
         submitForm();
-
+        clearBasket(basket);
 
 
     } else {
@@ -67,7 +65,7 @@ const validEmail = function(inputEmail) {
         errorEmail.innerHTML = "E-mail valide";
         errorEmail.style.color = 'green';
         contact.email = inputEmail.value;
-        console.log(contact.email);
+
         return true;
 
     } else {
@@ -75,19 +73,14 @@ const validEmail = function(inputEmail) {
         errorEmail.style.color = 'red';
         return false;
     }
-    console.log(testEmail);
+
 }
-
-
-
-/////////////validation et envoie d'un formulaire
 
 
 
 
 ///////****************Validation FirstName***************************
 
-//ecouter la modification de First Name
 form.firstName.addEventListener('change', function() {
     validFirstName(this);
 })
@@ -95,7 +88,7 @@ form.firstName.addEventListener('change', function() {
 
 
 const validFirstName = function(inputFirstName) {
-    ///creation de la regexp pour la validation firstName
+
     let firstNameRegex = new RegExp(
         /^[A-Za-z_-]+$/
     );
@@ -103,8 +96,7 @@ const validFirstName = function(inputFirstName) {
 
 
     let testFirstName = firstNameRegex.test(inputFirstName.value);
-    console.log(inputFirstName.value);
-    console.log(testFirstName);
+
     let errorFirstName = document.querySelector("#firstNameErrorMsg");
     if (testFirstName) {
 
@@ -123,7 +115,6 @@ const validFirstName = function(inputFirstName) {
 
 ///////****************Validation lastName***************************
 
-//ecouter la modification de lastName
 form.lastName.addEventListener('change', function() {
     validLastName(this);
 })
@@ -131,7 +122,7 @@ form.lastName.addEventListener('change', function() {
 
 
 const validLastName = function(inputLastName) {
-    ///creation de la regexp pour la validation last name
+
     let lastNameRegex = new RegExp(
         /^[A-Za-z_-]+$/
     );
@@ -157,7 +148,7 @@ const validLastName = function(inputLastName) {
 
 ///////****************Validation Adresse***************************
 
-//ecouter la modification de lastName
+
 form.address.addEventListener('change', function() {
     validAddress(this);
 })
@@ -165,7 +156,7 @@ form.address.addEventListener('change', function() {
 
 
 const validAddress = function(inputAddress) {
-    ///creation de la regexp pour la validation adresse
+
     let addressRegex = new RegExp(
         /^[a-zA-Z0-9.-_]{2,}$/
     );
@@ -175,7 +166,7 @@ const validAddress = function(inputAddress) {
     let testAddress = addressRegex.test(inputAddress.value);
 
     let errorAddress = document.querySelector("#addressErrorMsg");
-    console.log(errorAddress);
+
     if (testAddress) {
 
         errorAddress.innerHTML = "Adresse valide";
@@ -193,7 +184,7 @@ const validAddress = function(inputAddress) {
 
 ///////****************Validation city***************************
 
-//ecouter la modification de city
+
 form.city.addEventListener('change', function() {
     validCity(this);
 })
@@ -201,7 +192,7 @@ form.city.addEventListener('change', function() {
 
 
 const validCity = function(inputCity) {
-    ///creation de la regexp pour la validation firstName
+
     let cityRegex = new RegExp(
         /^[a-zA-Z0-9.-_]{2,}$/
     );
@@ -217,7 +208,7 @@ const validCity = function(inputCity) {
         errorCity.innerHTML = "Champ valide";
         errorCity.style.color = 'green';
         contact.city = inputCity.value;
-        console.log(inputCity.value);
+
         return true;
     } else {
         errorCity.innerHTML = "Champ non valide";
@@ -228,6 +219,7 @@ const validCity = function(inputCity) {
 }
 
 
+///////****************fonction pour envoyer le formulaire ***************************
 async function submitForm() {
     let response = await fetch("http://localhost:3000/api/products/order", {
         method: 'POST',
@@ -238,7 +230,7 @@ async function submitForm() {
     });
 
     let result = await response.json();
-    //localStorage.clear();
+
     orderId = result.orderId;
     document.location.href = `confirmation.html?id=${orderId}`;
 

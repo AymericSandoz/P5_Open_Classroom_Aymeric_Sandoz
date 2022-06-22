@@ -1,8 +1,11 @@
+/************ <!--  Définition d'une variable, en recherchant dans l'URl de page, 
+ de idItem qui contient l'Id du produit que l'utilisateur a cliqué  --> *************/
 var str = window.location.href;
 console.log(str);
 var url = new URL(str);
 var idItem = url.searchParams.get("id");
 
+/************ <!--  Promesse qui va rechercher 1 produit définit par son ID --> *************/
 fetch(`http://localhost:3000/api/products/` + idItem)
     .then(function(res) {
         if (res.ok) {
@@ -14,19 +17,13 @@ fetch(`http://localhost:3000/api/products/` + idItem)
 
         let itemArticle = document.querySelector(".item article");
 
-        itemArticle.innerHTML = afficherItemCanape(Canape);
+        itemArticle.innerHTML = displayItemCanape(Canape);
 
         const elt = document.querySelector('#addToCart');
-        console.log(elt); // On récupère l'élément sur lequel on veut détecter le clic
 
-        ////////QUESTION MENTOR : POURQUOI ON PEUT PAS METTRE ADDEVENTLISTENER EN DEHORS DU FETCH ? 
-        elt.addEventListener("click", function(event) { // On écoute l'événement click
-            event.preventDefault();
-            console.log("Bouton clické !");
-            console.log(Canape);
-
-
-            var selectedcolor = getSelectValue('colors');
+        /************ <!--  Evenement listener ou on écoute le clic de l'utilsateur sur le bouton "Ajouter au panier"--> *************/
+        elt.addEventListener("click", function(event) {
+            var selectedcolor = getSelectedValue('colors');
 
             addProductsToBasket(Canape, getProductQuantity(), selectedcolor);
 
@@ -34,21 +31,14 @@ fetch(`http://localhost:3000/api/products/` + idItem)
 
     })
     .catch(function(err) {
-        // Une erreur est survenue
+        alert("Une erreur est survenue");
     })
 
+/************ <!--  Promesse qui va rechercher 1 produit définit par son ID --> *************/
 
+/**** <!--  Fonction pour afficher la couleur du produit --> ***/
 
-
-
-
-
-
-
-
-/*fonctions pour insérer les élements de la page produits à partir de la liste de canapé*/
-
-const afficherProductColor = function(Canape) {
+const displayProductColor = function(Canape) {
 
     let result = "";
     for (let i = 0; i < Canape.colors.length; i++) {
@@ -59,8 +49,8 @@ const afficherProductColor = function(Canape) {
 
 }
 
-
-const afficherItemCanape = function(Canape) {
+/**** <!--  Fonction pour afficher le produit --> ***/
+const displayItemCanape = function(Canape) {
     let result = `
     <div class="item__img">
         <img src="${Canape.imageUrl}" alt="Photographie d'un canapé"> 
@@ -85,7 +75,7 @@ const afficherItemCanape = function(Canape) {
             <div class="item__content__settings__color">
                 <label for="color-select">Choisir une couleur :</label>
                 <select name="color-select" id="colors">
-                ${afficherProductColor(Canape)}
+                ${displayProductColor(Canape)}
   </select>
             </div>
 
@@ -107,10 +97,9 @@ const afficherItemCanape = function(Canape) {
 
 
 
-//////Pour récupérer la couleur du canapé et le nombre d'article désiré avant de cliquer sur ajouter sur le panier
+/**** <!--  Fonction qui retourne la valeur du select selectId --> ***/
 
-/**Retourne la valeur du select selectId*/
-function getSelectValue(selectId) {
+function getSelectedValue(selectId) {
     /**On récupère l'élement html <select>*/
     var selectElmt = document.getElementById(selectId);
     /**
@@ -120,6 +109,7 @@ function getSelectValue(selectId) {
     return selectElmt.options[selectElmt.selectedIndex].value;
 }
 
+/**** <!--  Fonction qui retourne la quantité de produit selectionné --> ***/
 function getProductQuantity() {
     var productQuantity = parseInt(document.getElementById("quantity").value, 10);
     return productQuantity;

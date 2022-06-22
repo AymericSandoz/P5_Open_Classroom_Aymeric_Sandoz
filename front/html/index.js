@@ -1,22 +1,19 @@
-
-//let CanapeID;//
-
-/************<!--  Promesse pour récupérer la liste de l'ensemble des articles *************/
+/************ <!--  Promesse pour récupérer la liste de l'ensemble des articles --> *************/
 fetch('http://localhost:3000/api/products')
     .then(function(res) {
         if (res.ok) {
             return res.json();
         }
     })
-    .then(function(ListCanape) {
+    .then(function(listOfProducts) {
 
 
         let items = document.getElementById('items');
 
 
 
-        items.innerHTML = AfficherTousLesCanapes(ListCanape);
-        console.log(ListCanape);
+        items.innerHTML = displayAllProducts(listOfProducts);
+        console.log(listOfProducts);
 
     })
     .catch(function(err) {
@@ -24,8 +21,8 @@ fetch('http://localhost:3000/api/products')
     });
 
 
-
-const AfficherCanape = function(Canape) {
+/************ <!--  Fonction permettant d'afficher un produit(canapé) sur la page d'acceuil --> *************/
+const displayOneProduct = function(Canape) {
     let result = `   <a href="./product.html?id=${Canape._id}">      
     <article>
       <img src="${Canape.imageUrl}" alt="${Canape.altTxt}">
@@ -37,11 +34,11 @@ const AfficherCanape = function(Canape) {
     return result;
 }
 
-
-const AfficherTousLesCanapes = function(ListCanape) {
+/************ <!--  Fonction permettant d'afficher l'ensemble des produits sur la page d'acceuil --> *************/
+const displayAllProducts = function(listOfProducts) {
     let result = "";
-    for (let i = 0; i < ListCanape.length; i++) {
-        result += AfficherCanape(ListCanape[i]);
+    for (let i = 0; i < listOfProducts.length; i++) {
+        result += displayOneProduct(listOfProducts[i]);
     };
     return result;
 }

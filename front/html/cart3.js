@@ -6,30 +6,26 @@ var totalProductQuantity = 0;
 var tabCanapePrice = new Array();
 
 
+
+/************ <!-- fonction pour afficher les articles du panier --> *************/
+
 async function displayAllBasketproducts(ListBasket) {
     for (let i = 0; i < ListBasket.length; i++) {
 
 
 
-        canapePrice = await asyncKanapTest(ListBasket, i);
+        canapePrice = await fetchProductById(ListBasket, i);
         tabCanapePrice[i] = canapePrice;
 
-        ////Partie pour calculer le prix
-        //totalPrice += ListBasket[i].quantity * canapePrice;
-
-        ///////////: Partie pour calculer laa quantité totale
-        //totalProductQuantity += parseInt(ListBasket[i].quantity);
 
     };
 
     actualiseTotalPriceAndQuantity(tabCanapePrice);
-    //let cartPrice = document.querySelector(".cart__price");
-    //cartPrice.innerHTML = `<p>Total (<span id="totalQuantity">${totalProductQuantity}</span> articles) : <span id="totalPrice">${totalPrice}</span> €</p> `;
 
 
+    /************ <!--  Ajoute un addeventlistener pour chaque élément pour changer la quantité d'un produit--> *************/
 
-    ///////////////////changer la quantité de produit  !!! ajoute un addeventlistener pour chaque produits du panier
-    let selectElement = document.getElementsByClassName('itemQuantity'); //utiliser querySelector
+    let selectElement = document.getElementsByClassName('itemQuantity');
 
     for (let i = 0; i < selectElement.length; i++) {
         selectElement[i].addEventListener('change', (event) => {
@@ -42,7 +38,8 @@ async function displayAllBasketproducts(ListBasket) {
         });
     }
 
-    /////////////supprimer un produit, pareil ahoute un addEventList pour chaque produits du paniers
+    /************ <!--  Ajoute un addeventlistener pour chaque élément pour supprimer un produit--> *************/
+
     const itemToDelete = document.getElementsByClassName('deleteItem');
 
     for (let i = 0; i < itemToDelete.length; i++) {
@@ -55,14 +52,15 @@ async function displayAllBasketproducts(ListBasket) {
 
 }
 
-//////////Permet d'afficher tout les canapés
-async function asyncKanapTest(ListBasket, i) {
+/************ <!--  fonction qui permet de récupérer un produit grâce à son ID--> *************/
+
+async function fetchProductById(ListBasket, i) {
     let response = await fetch(`http://localhost:3000/api/products/` + ListBasket[i]._id);
     let Canape = await response.json();
 
     let itemBasketArticle = document.querySelector("#cart__items");
 
-    itemBasketArticle.innerHTML += AfficherCanapePagePanier(Canape, ListBasket[i].quantity, ListBasket[i].color);
+    itemBasketArticle.innerHTML += displayBasketProduct(Canape, ListBasket[i].quantity, ListBasket[i].color);
 
     return Canape.price;
 
@@ -74,8 +72,9 @@ async function asyncKanapTest(ListBasket, i) {
 
 
 
-/////////Permet d'afficher un canape
-const AfficherCanapePagePanier = function(Canape, CanapeQuantity, CanapeColor) {
+/************ <!--  Ajoute un addeventlistener pour chaque élément pour changer la quantité d'un produit--> *************/
+
+const displayBasketProduct = function(Canape, CanapeQuantity, CanapeColor) {
     let result = `<article class="cart__item" data-id="${Canape._id}" data-color="${CanapeColor}">
     <div class="cart__item__img">
       <img src="${Canape.imageUrl}" alt="Photographie d'un canapé">
