@@ -1,13 +1,13 @@
  /************ <!--  Fonction qui permet de sauvegarder le panier dans le local storage, en le triant dans un premier temps--> *************/
 
- function saveBasket(basket) {
+ const saveBasket = (basket) => {
      basket.sort(compareKanapName);
      localStorage.setItem("basket", JSON.stringify(basket));
  }
 
  /************ <!--  Fonction pour trier le panier par ordre alphabétique, donc par nom de produits--> *************/
 
- function compareKanapName(a, b) {
+ const compareKanapName = (a, b) => {
      if (a.name.toLowerCase() < b.name.toLowerCase()) {
          return -1;
      }
@@ -19,7 +19,7 @@
 
  /************ <!-- Fonction qui permet de récuperer le contenu du local storage, soit le panier--> *************/
 
- function getBasket() {
+ const getBasket = () => {
 
      let basket = localStorage.getItem("basket");
 
@@ -33,7 +33,7 @@
 
  /************ <!--  fonction qui permet d'ajouter des articles dans le panier--> *************/
 
- function addProductsToBasket(product, productQuantity, productColor) {
+ const addProductsToBasket = (product, productQuantity, productColor) => {
      let basket = getBasket();
      product.color = productColor;
      let foundProduct = basket.find(p => {
@@ -62,7 +62,7 @@
  }
 
  /************ <!--  fonction qui permet de supprimer des articles du panier--> *************/
- function removeFromBasket(product) {
+ const removeFromBasket = (product) => {
 
      let basket = getBasket();
      //Filtre le tableau par rapport à une condition !! 
@@ -76,7 +76,7 @@
  }
 
  /************ <!--  fonction qui de modifier la quantité d'un articles présent dans le panier --> *************/
- function changeQuantity(product, quantity, i) {
+ const changeQuantity = (product, quantity, i) => {
      let cartContentQuantity = document.querySelectorAll('.cart__item__content__settings__quantity p');
 
      let basket = getBasket();
@@ -99,7 +99,7 @@
 
  /************ <!--  fonctions pour afficher  la quantité totale et le prix total--> *************/
 
- function actualiseTotalPriceAndQuantity(tabCanapePrice) {
+ const actualiseTotalPriceAndQuantity = (tabCanapePrice) => {
      totalProductQuantity = getNumberProduct();
      totalPrice = getTotalPrice(tabCanapePrice);
      let cartPrice = document.querySelector(".cart__price");
@@ -109,7 +109,7 @@
 
  /************ <!--  fonction pour calculer la quantité total d'article dans le panier --> *************/
 
- function getNumberProduct() {
+ const getNumberProduct = () => {
      let basket = getBasket();
      let number = 0;
      for (let product of basket) {
@@ -121,7 +121,7 @@
 
  /************ <!--  fonctions pour calculer le prix total--> *************/
 
- function getTotalPrice(tabCanapePrice) {
+ const getTotalPrice = (tabCanapePrice) => {
      let basket = getBasket();
      let total = 0;
      let i = 0;
@@ -137,7 +137,7 @@
 
  /************ <!--  fonctions pour trier les articles du panier par nom--> *************/
 
- function compareKanapName(a, b) {
+ const compareKanapName = (a, b) => {
      if (a.name.toLowerCase() < b.name.toLowerCase()) {
          return -1;
      }
@@ -149,7 +149,7 @@
 
 
 
- function clearBasket(basket) {
+ const clearBasket = (basket) => {
      localStorage.clear();
      basket = getBasket();
  }
