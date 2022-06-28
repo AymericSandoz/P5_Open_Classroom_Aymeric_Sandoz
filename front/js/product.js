@@ -18,16 +18,8 @@ fetch(`http://localhost:3000/api/products/` + idItem)
         let itemArticle = document.querySelector(".item article");
 
         itemArticle.innerHTML = displayItemCanape(Canape);
-
-        const elt = document.querySelector('#addToCart');
-
-        /************ <!--  Evenement listener ou on écoute le clic de l'utilsateur sur le bouton "Ajouter au panier"--> *************/
-        elt.addEventListener("click", function(event) {
-            var selectedcolor = getSelectedValue('colors');
-
-            addProductsToBasket(Canape, getProductQuantity(), selectedcolor);
-
-        })
+     
+        listenerToAddProductsToBasket(Canape);
 
     })
     .catch(function(err) {
@@ -96,7 +88,48 @@ const displayItemCanape = function(Canape) {
 }
 
 
+/************ <!--  fonction qui permet d'ajouter des articles dans le panier--> *************/
 
+function addProductsToBasket(product, productQuantity, productColor) {
+    let basket = getBasket();
+    product.color = productColor;
+    let foundProduct = basket.find(p => {
+        return (p._id == product._id && p.color == product.color)
+    });
+    if (foundProduct != undefined) {
+        foundProduct.quantity += productQuantity;
+
+    } else if (productQuantity > 0) {
+        product.quantity = productQuantity;
+        var productToSave = {
+            _id: product._id,
+            color: product.color,
+            quantity: product.quantity,
+            name: product.name
+
+
+        }
+
+        basket.push(productToSave);
+    }
+
+
+    saveBasket(basket);
+
+}
+
+// /************ <!--  Evenement listener ou on écoute le clic de l'utilsateur sur le bouton "Ajouter au panier"--> *************/
+
+function listenerToAddProductsToBasket(Canape) {
+    const elt = document.querySelector('#addToCart');
+
+    elt.addEventListener("click", function(event) {
+        var selectedcolor = getSelectedValue('colors');
+
+        addProductsToBasket(Canape, getProductQuantity(), selectedcolor);
+
+    })
+}
 /**** <!--  Fonction qui retourne la valeur du select selectId --> ***/
 
 function getSelectedValue(selectId) {

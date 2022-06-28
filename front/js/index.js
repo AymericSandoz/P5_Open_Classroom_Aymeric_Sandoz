@@ -10,10 +10,8 @@ fetch('http://localhost:3000/api/products')
 
         let items = document.getElementById('items');
 
-
-
         items.innerHTML = displayAllProducts(listOfProducts);
-        console.log(listOfProducts);
+
 
     })
     .catch(function(err) {

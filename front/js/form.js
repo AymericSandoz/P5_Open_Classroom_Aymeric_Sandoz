@@ -1,6 +1,5 @@
 let contact = new Object();
 
-
 /************ <!--  fonction pour creer un tableau avec les Id des canapés du panier--> *************/
 
 let createProductsIdArray = function() {
@@ -28,9 +27,7 @@ form.addEventListener('submit', function(e) {
     e.preventDefault();
     let basket = getBasket();
 
-    if (basket.length == 0) {
-        alert("Votre panier est vide");
-    } else if (validEmail(form.email) && validAddress(form.address) && validCity(form.city) && validFirstName(form.firstName) && validLastName(form.lastName)) {
+    if (validEmail(form.email) && validAddress(form.address) && validCity(form.city) && validFirstName(form.firstName) && validLastName(form.lastName)) {
         submitForm();
         clearBasket(basket);
 
@@ -43,18 +40,15 @@ form.addEventListener('submit', function(e) {
 
 
 ///////****************Validation email***************************
-//ecouter la modification du prénom
+//ecouter la modification du mail
 form.email.addEventListener('change', function() {
     validEmail(this);
 
 })
-
-
-
 const validEmail = function(inputEmail) {
     ///creation de la regexp pour la validation email
     let emailRegex = new RegExp(
-        '[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$', 'g' /////QUestion mentor à quoi sert le g ? 
+        '[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$', 'g'
     );
 
     let testEmail = emailRegex.test(inputEmail.value);

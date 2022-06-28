@@ -31,48 +31,25 @@
      }
  }
 
- /************ <!--  fonction qui permet d'ajouter des articles dans le panier--> *************/
 
- function addProductsToBasket(product, productQuantity, productColor) {
-     let basket = getBasket();
-     product.color = productColor;
-     let foundProduct = basket.find(p => {
-         return (p._id == product._id && p.color == product.color)
-     });
-     if (foundProduct != undefined) {
-         foundProduct.quantity += productQuantity;
-
-     } else if (productQuantity > 0) {
-         product.quantity = productQuantity;
-         var productToSave = {
-             _id: product._id,
-             color: product.color,
-             quantity: product.quantity,
-             name: product.name
-
-
-         }
-
-         basket.push(productToSave);
-     }
-
-
-     saveBasket(basket);
-
- }
 
  /************ <!--  fonction qui permet de supprimer des articles du panier--> *************/
- function removeFromBasket(product) {
+ function removeFromBasket(product, itemToDelete) {
 
      let basket = getBasket();
      //Filtre le tableau par rapport à une condition !! 
      basket = basket.filter(p => {
          return p._id != product._id || p.color != product.color;
-     }); //Conserve tous les produits dont l'id est différent de l'id en question
-     //en gros supprime le produit
+     });
      saveBasket(basket);
 
+     itemToDelete.closest('article').style.display = 'none'; //Gérer l'affichage sur le dom
+
      actualiseTotalPriceAndQuantity(tabCanapePrice);
+     if (basket.length == 0) {
+         displayEmptyBasket();
+
+     }
  }
 
  /************ <!--  fonction qui de modifier la quantité d'un articles présent dans le panier --> *************/
@@ -86,14 +63,18 @@
      if (foundProduct != undefined) {
          foundProduct.quantity = quantity;
      }
-     if (foundProduct.quantity <= 0) {
-         removeFromBasket(foundProduct);
-     } else {
-         saveBasket(basket);
-         cartContentQuantity[i].innerHTML = `Qté : ${foundProduct.quantity}`;
 
+     saveBasket(basket); //modification du local storage
+     cartContentQuantity[i].innerHTML = `Qté : ${foundProduct.quantity}`; //modfication du Dom
+
+
+
+     if (basket.length == 0) {
+         displayEmptyBasket();
 
      }
+
+
      actualiseTotalPriceAndQuantity(tabCanapePrice);
  }
 
@@ -152,4 +133,41 @@
  function clearBasket(basket) {
      localStorage.clear();
      basket = getBasket();
+ }
+
+ function displayEmptyBasket() {
+     let basketPresentation = document.querySelector(".cartAndFormContainer h1");
+     basketPresentation.innerHTML = 'Votre panier est vide';
+     let form = document.querySelector(".cart__order");
+     form.style.display = 'none';
+ }
+
+ /************ <!--  Ajoute un addeventlistener pour chaque élément pour changer la quantité d'un produit--> *************/
+
+ function listenerToQuantityChange(ListBasket) {
+     let selectElement = document.getElementsByClassName('itemQuantity');
+
+     for (let i = 0; i < selectElement.length; i++) {
+         selectElement[i].addEventListener('change', (event) => {
+
+             let inputChange = selectElement[i].value;
+             changeQuantity(ListBasket[i], inputChange, i);
+
+
+
+         });
+     }
+ }
+
+ /************ <!--  Ajoute un addeventlistener pour chaque élément pour supprimer un produit--> *************/
+ function listenerToRemoveFromBasket(ListBasket) {
+     const itemToDelete = document.getElementsByClassName('deleteItem');
+
+     for (let i = 0; i < itemToDelete.length; i++) {
+         itemToDelete[i].addEventListener('click', (event) => {
+
+             removeFromBasket(ListBasket[i], itemToDelete[i]);
+
+         });
+     }
  }
