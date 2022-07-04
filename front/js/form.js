@@ -1,4 +1,5 @@
 let contact = new Object();
+var accentedCharacters = "àèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ";
 
 /************ <!--  fonction pour creer un tableau avec les Id des canapés du panier--> *************/
 
@@ -48,7 +49,7 @@ form.email.addEventListener('change', function() {
 const validEmail = function(inputEmail) {
     ///creation de la regexp pour la validation email
     let emailRegex = new RegExp(
-        '[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$', 'g'
+        '[a-zA-Z0-9._-]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$', 'g'
     );
 
     let testEmail = emailRegex.test(inputEmail.value);
@@ -84,7 +85,7 @@ form.firstName.addEventListener('change', function() {
 const validFirstName = function(inputFirstName) {
 
     let firstNameRegex = new RegExp(
-        /^[A-Za-z_-]+$/
+        '^[A-Za-z_ -]+$'
     );
 
 
@@ -118,7 +119,7 @@ form.lastName.addEventListener('change', function() {
 const validLastName = function(inputLastName) {
 
     let lastNameRegex = new RegExp(
-        /^[A-Za-z_-]+$/
+        '^[A-Za-z_ -]+$'
     );
 
 
@@ -152,7 +153,7 @@ form.address.addEventListener('change', function() {
 const validAddress = function(inputAddress) {
 
     let addressRegex = new RegExp(
-        /^[a-zA-Z0-9.-_]{2,}$/
+        '^[a-zA-Z0-9.-_ ]{2,}$'
     );
 
 
@@ -188,7 +189,7 @@ form.city.addEventListener('change', function() {
 const validCity = function(inputCity) {
 
     let cityRegex = new RegExp(
-        /^[a-zA-Z0-9.-_]{2,}$/
+        '^[a-zA-Z0-9.-_ ]{2,}$'
     );
 
 
