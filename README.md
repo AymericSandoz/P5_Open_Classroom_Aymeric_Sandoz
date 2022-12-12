@@ -4,7 +4,7 @@ Back-end fourni par openClassrooms https://github.com/OpenClassrooms-Student-Cen
 
 Une démo fonctionnelle de ce site est sur 
 
-L'HTML & CSS est aussi fourni, il manque la conception du JS dans ce projet à compléter.
+L'HTML & CSS sont aussi fourni, il manque la conception du JS dans ce projet à compléter.
 
 ### Back end ###
 
