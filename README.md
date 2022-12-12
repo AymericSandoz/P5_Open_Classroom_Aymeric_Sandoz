@@ -1,4 +1,4 @@
-# Projet 5 Open Classroom - Kanap #
+# Projet 5 - Kanap #
 
 Kanap est un site de vente en ligne de canapés. 
 
