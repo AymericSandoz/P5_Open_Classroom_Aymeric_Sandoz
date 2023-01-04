@@ -8,6 +8,11 @@ Back-end fourni par openClassrooms https://github.com/OpenClassrooms-Student-Cen
 
 L'HTML & CSS sont aussi fourni, il manque la conception du JS dans ce projet à compléter.
 
+-Gérer des événements JavaScript
+-Interagir avec un web service avec JavaScript
+-Valider des données issues de sources externes
+-Créer un plan de test pour une application
+
 
 
 ## Installation
