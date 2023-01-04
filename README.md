@@ -2,8 +2,6 @@
 
 Kanap est un site de vente en ligne de canapés. 
 
-Une démo fonctionnelle de ce site est sur 
-
 
 ## Objectifs et Compétences évaluées
 Back-end fourni par openClassrooms https://github.com/OpenClassrooms-Student-Center/P5-Dev-Web-Kanap,
